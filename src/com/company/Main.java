@@ -30,6 +30,7 @@ class UserProfile
 public class Main {
     static Scanner scan;
     static ArrayList<UserProfile> Users;
+
     static int Menu()
     {
         System.out.println("Выберите действие:");
@@ -38,7 +39,9 @@ public class Main {
         System.out.println("3 - удалить пользователя");
         System.out.println("4 - показать список всех пользователей");
         System.out.println("0 - выйти из программы");
-        return scan.nextInt();
+        int result = scan.nextInt();
+        scan.nextLine();
+        return result;
     }
     static int nameAtArr(String name)
     {
@@ -54,6 +57,7 @@ public class Main {
     }
     static void findProfile()
     {
+//        scan.nextLine(); // костыль
         System.out.print("Введите имя пользователя: ");
         String nameUser = scan.nextLine();
         int ind = nameAtArr(nameUser);
@@ -68,6 +72,7 @@ public class Main {
     }
     static void deleteProfile()
     {
+//        scan.nextLine(); // костыль
         System.out.print("Введите имя пользователя, которого хотите удалить: ");
         String nameUser = scan.nextLine();
         int ind = nameAtArr(nameUser);
@@ -91,7 +96,7 @@ public class Main {
     {
         UserProfile user = new UserProfile();
         Users.add(user);
-
+//        scan.nextLine(); // костыль
         System.out.print("Введите имя: ");
         user.name = scan.nextLine();
         System.out.print("Введите адрес эл.почты: ");
