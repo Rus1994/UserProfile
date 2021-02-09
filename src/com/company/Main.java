@@ -57,7 +57,6 @@ public class Main {
     }
     static void findProfile()
     {
-//        scan.nextLine(); // костыль
         System.out.print("Введите имя пользователя: ");
         String nameUser = scan.nextLine();
         int ind = nameAtArr(nameUser);
@@ -72,7 +71,6 @@ public class Main {
     }
     static void deleteProfile()
     {
-//        scan.nextLine(); // костыль
         System.out.print("Введите имя пользователя, которого хотите удалить: ");
         String nameUser = scan.nextLine();
         int ind = nameAtArr(nameUser);
@@ -96,7 +94,6 @@ public class Main {
     {
         UserProfile user = new UserProfile();
         Users.add(user);
-//        scan.nextLine(); // костыль
         System.out.print("Введите имя: ");
         user.name = scan.nextLine();
         System.out.print("Введите адрес эл.почты: ");
