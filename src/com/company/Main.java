@@ -1,10 +1,12 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
-class UserProfile
-{
+class UserProfile {
     String name;
     String email;
     String date;
@@ -16,14 +18,14 @@ class UserProfile
 
     @Override
     public String toString() {
-        return  "Имя = " + name + '\n' +
+        return "Имя = " + name + '\n' +
                 "Дата рождения = " + date + '\n' +
                 "email = " + email + '\n' +
                 "Адрес = " + address + '\n' +
                 "Номер телефона = " + numberPhone + '\n' +
                 "Место работы = " + placeWork + '\n' +
                 "Информация о себе = " + infoMyself + '\n' +
-                "Другая информация = " + otherInfo + '\n' ;
+                "Другая информация = " + otherInfo + '\n';
     }
 }
 
@@ -31,8 +33,7 @@ public class Main {
     static Scanner scan;
     static ArrayList<UserProfile> Users;
 
-    static int Menu()
-    {
+    static int Menu() {
         System.out.println("Выберите действие:");
         System.out.println("1 - найти пользователя");
         System.out.println("2 - создать пользователя");
@@ -43,55 +44,46 @@ public class Main {
         scan.nextLine();
         return result;
     }
-    static int nameAtArr(String name)
-    {
+
+    static int nameAtArr(String name) {
         int ind;
-        for(ind = 0; ind < Users.size(); ind++)
-        {
-            if(Users.get(ind).name.equals(name))
-            {
+        for (ind = 0; ind < Users.size(); ind++) {
+            if (Users.get(ind).name.equals(name)) {
                 return ind;
             }
         }
         return -1;
     }
-    static void findProfile()
-    {
+
+    static void findProfile() {
         System.out.print("Введите имя пользователя: ");
         String nameUser = scan.nextLine();
         int ind = nameAtArr(nameUser);
-        if(ind == -1)
-        {
+        if (ind == -1) {
             System.out.println("Пользователь не найден");
-        }
-        else
-        {
+        } else {
             System.out.println(Users.get(ind).toString());
         }
     }
-    static void deleteProfile()
-    {
+
+    static void deleteProfile() {
         System.out.print("Введите имя пользователя, которого хотите удалить: ");
         String nameUser = scan.nextLine();
         int ind = nameAtArr(nameUser);
-        if(ind == -1)
-        {
+        if (ind == -1) {
             System.out.println("Пользователь не найден");
-        }
-        else
-        {
+        } else {
             Users.remove(ind);
         }
     }
-    static void showListProfile()
-    {
-        for(UserProfile user : Users)
-        {
+
+    static void showListProfile() {
+        for (UserProfile user : Users) {
             System.out.println(user.name);
         }
     }
-    static void createProfile()
-    {
+
+    static void createProfile() {
         UserProfile user = new UserProfile();
         Users.add(user);
         System.out.print("Введите имя: ");
@@ -112,7 +104,8 @@ public class Main {
         user.otherInfo = scan.nextLine();
     }
 
-    public static void main(String[] args) {
+    static void homework2_2()
+    {
         scan = new Scanner(System.in);
         Users = new ArrayList<UserProfile>();
         int option;
@@ -139,5 +132,148 @@ public class Main {
                     break;
             }
         }while(option != 0);
+
+    }
+    static void homeworkRegex()
+    {
+        String inputStr = "36 14 928846";
+        Pattern ptr = Pattern.compile("\\d{4}\\s\\d{6}"); // шаблон
+        Matcher match = ptr.matcher(inputStr);
+
+        Pattern ptr2 = Pattern.compile("\\d"); // шаблон
+        Matcher match2 = ptr2.matcher(inputStr);
+
+        StringBuffer strBuf = new StringBuffer();
+
+        if(match.find())
+        {
+            System.out.println(match.group(0));
+        }
+        else
+        {
+            int count = 0;
+            while(match2.find())
+            {
+                count++;
+                if(count > 10)
+                {
+                    break;
+                }
+                strBuf.append(match2.group(0));
+                if(count == 4)
+                {
+                    strBuf.append(" ");
+                }
+            }
+            if(count == 10)
+            {
+                System.out.println(strBuf);
+            }
+            else
+            {
+                System.out.println("Количество цифр не соответствует формату");
+            }
+        }
+    }
+    static void homeworkAdd()
+    {
+        String text = "Java is a general-purpose computer programming language that is concurrent, class-based, object-oriented, and " +
+                "specifically designed to have as few implementation dependencies as possible. It is intended to let application " +
+                "developers write once, run anywhere, meaning that compiled Java code can run on all platforms that support Java " +
+                "without the need for recompilation. Java applications are typically compiled to bytecode that can run on any Java " +
+                "virtual machine regardless of computer architecture. As of 2016, Java is one of the most popular programming " +
+                "languages in use, particularly for client-server web applications, with a reported 9 million developers. Java was " +
+                "originally developed by James Gosling at Sun Microsystems and released in 1995 as a core component of Sun " +
+                "Microsystems' Java platform.";
+
+        int count = text.length();
+        int row = (int)Math.sqrt(count);
+        Pattern ptr = Pattern.compile(" "); // шаблон
+        Matcher match = ptr.matcher(text);
+        List<Integer> indexList = new ArrayList<Integer>(); // индексы всех пробелов
+        List<Integer> spaceList = new ArrayList<Integer>();  // индексы тех мест где будет переход на новую строку
+        List<Integer> countSpaceList = new ArrayList<Integer>();
+        List<Integer> addSpaceList = new ArrayList<Integer>(); // сколько пробелов надо добавить в строку
+
+        int limit = row;
+        int countSpace = 0;
+
+        while(match.find()) // записываем индексы всех пробелов
+        {
+            indexList.add(match.start());
+        }
+
+        for(int i = 0; i < indexList.size(); i++)
+        {
+            if(indexList.get(i) > limit)
+            {
+                spaceList.add(indexList.get(i-1)); // индексы переходов на новую строку
+                addSpaceList.add(limit - indexList.get(i-1));
+                limit += row;
+                countSpaceList.add(countSpace - 1); // записываем кол-во пробелов в строке, чтобы в них распределять оставшеесь пространство
+                countSpace = 0;
+            }
+            else
+            {
+                countSpace++;
+            }
+        }
+        spaceList.add(text.length());
+        indexList.add(text.length());
+
+        int ind = 0;
+        int indSp = 0;
+        int addSpace = addSpaceList.get(0)/countSpaceList.get(0);
+        countSpace = addSpaceList.get(0)%countSpaceList.get(0);
+        for(int i = 0; i < text.length(); i++)
+        {
+            if(i != indexList.get(ind)) // если символ не пробел, то просто его выводим
+            {
+                System.out.print(text.charAt(i));
+            }
+            else if(i !=  spaceList.get(indSp)) // если это просто пробел
+            {
+                if(countSpace == 0)
+                {
+                    String str = new String(new char[addSpace]).replace("\0", " ");
+                    System.out.print(str);
+                }
+                else
+                {
+                    String str = new String(new char[addSpace + 1]).replace("\0", " ");
+                    System.out.print(str);
+                    countSpace--;
+                }
+                ind++;
+            }
+            else // если переход на другую строку
+            {
+                System.out.println("");
+                ind++;
+                indSp++;
+                if(indSp < addSpaceList.size())
+                {
+                    addSpace = addSpaceList.get(indSp)/countSpaceList.get(indSp);
+                    countSpace = addSpaceList.get(indSp)%countSpaceList.get(indSp);
+                }
+
+            }
+        }
+
+
+
+//            for(int i = 0; i < count; i++)
+//            {
+//                if(i%row == 0)
+//                {
+//                    System.out.println("");
+//                }
+//                System.out.print(text.charAt(i));
+//            }
+    }
+    public static void main(String[] args) {
+//        homeworkRegex();
+//        homework2_2();
+        homeworkAdd();
     }
 }
