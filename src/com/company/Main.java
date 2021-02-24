@@ -187,7 +187,7 @@ public class Main {
                 "Microsystems' Java platform.";
 
         int count = text.length();
-        int row = (int)Math.sqrt(count);
+        int row = (int)Math.sqrt(count)+2;
         Pattern ptr = Pattern.compile(" "); // шаблон
         Matcher match = ptr.matcher(text);
         List<Integer> indexList = new ArrayList<Integer>(); // индексы всех пробелов
@@ -209,9 +209,9 @@ public class Main {
             {
                 spaceList.add(indexList.get(i-1)); // индексы переходов на новую строку
                 addSpaceList.add(limit - indexList.get(i-1));
-                limit += row;
+                limit = indexList.get(i-1)+row;
                 countSpaceList.add(countSpace - 1); // записываем кол-во пробелов в строке, чтобы в них распределять оставшеесь пространство
-                countSpace = 0;
+                countSpace = 1;
             }
             else
             {
@@ -235,12 +235,12 @@ public class Main {
             {
                 if(countSpace == 0)
                 {
-                    String str = new String(new char[addSpace]).replace("\0", " ");
+                    String str = new String(new char[addSpace+1]).replace("\0", " ");
                     System.out.print(str);
                 }
                 else
                 {
-                    String str = new String(new char[addSpace + 1]).replace("\0", " ");
+                    String str = new String(new char[addSpace + 2]).replace("\0", " ");
                     System.out.print(str);
                     countSpace--;
                 }
@@ -253,23 +253,13 @@ public class Main {
                 indSp++;
                 if(indSp < addSpaceList.size())
                 {
-                    addSpace = addSpaceList.get(indSp)/countSpaceList.get(indSp);
-                    countSpace = addSpaceList.get(indSp)%countSpaceList.get(indSp);
+                    addSpace = countSpaceList.get(indSp) != 0 ? (addSpaceList.get(indSp)/countSpaceList.get(indSp)) : 0;
+                    countSpace = countSpaceList.get(indSp) != 0 ? addSpaceList.get(indSp)%countSpaceList.get(indSp) : 0;
+                    countSpace++;
                 }
 
             }
         }
-
-
-
-//            for(int i = 0; i < count; i++)
-//            {
-//                if(i%row == 0)
-//                {
-//                    System.out.println("");
-//                }
-//                System.out.print(text.charAt(i));
-//            }
     }
     public static void main(String[] args) {
 //        homeworkRegex();
