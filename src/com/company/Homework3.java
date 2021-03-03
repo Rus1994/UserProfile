@@ -42,7 +42,7 @@ class IceCream
         tastePrice.put(Tastes.cherry, 5F);
         tastePrice.put(Tastes.banana, 10F);
         tastePrice.put(Tastes.chocolate, 15F);
-        
+
         topPrice.put(Toppings.chocolate, 11F);
         topPrice.put(Toppings.nuts, 13F);
         topPrice.put(Toppings.fruit, 14F);
