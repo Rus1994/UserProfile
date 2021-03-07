@@ -107,6 +107,7 @@ public class Homework2 {
 
     static public void homework2_2()
     {
+        System.out.println("Домашнее задание 2 - Профиль");
         scan = new Scanner(System.in);
         Users = new ArrayList<UserProfile>();
         int option;
@@ -137,6 +138,8 @@ public class Homework2 {
     }
     static public void homeworkRegex()
     {
+        System.out.println("Домашнее задание 2 - регулярные выражения, проверка входных данных от пользователя(паспорт)");
+
         scan = new Scanner(System.in);
         System.out.print("Введите серию и номер паспорта: ");
         String inputStr = scan.nextLine();//"36 14 123456";
@@ -181,6 +184,7 @@ public class Homework2 {
     }
     static public void homeworkAdd()
     {
+        System.out.println("Домашнее задание 2 - Вывод текста в квадрате");
         homeworkAdd(0);
         System.out.println("");
     }
