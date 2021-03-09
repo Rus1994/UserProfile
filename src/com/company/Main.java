@@ -6,6 +6,7 @@ public class Main {
 //        Homework2.homeworkAdd();
 //        Homework2.homeworkRegex();
 //        Homework2.homework2_2();
-        Homework3.run();
+//        Homework3.run();
+        Homework4.run();
     }
 }
