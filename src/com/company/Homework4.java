@@ -56,8 +56,8 @@ class Viking extends AbsWarrior
         counterID++;
         IDwarrior = counterID;
         nameClass = "Викинг";
-        health = 80;
-        damage = 70;
+        health = 100;
+        damage = 50;
     }
 }
 class Knight extends  AbsWarrior
@@ -68,8 +68,8 @@ class Knight extends  AbsWarrior
         counterID++;
         IDwarrior = counterID;
         nameClass = "Рыцарь";
-        health = 75;
-        damage = 75;
+        health = 110;
+        damage = 40;
     }
 }
 class Squad
@@ -101,7 +101,7 @@ class Squad
     public Warrior getRandomWarrior(){
         Warrior war;
         do {
-            int numWar = (int) Math.random() * warriorsList.size();
+            int numWar = (int) (Math.random() * warriorsList.size());
             war = warriorsList.get(numWar);
         }while(!war.isAlive());
         return war;
@@ -148,14 +148,18 @@ class DateHelper
         currentTime = currentCal.getTime();
         long diffTime = currentCal.getTime().getTime() - startCal.getTime().getTime();
         System.out.println(diffTime);
-        Date diff = new Date(diffTime);
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(diff);
-        int y = currentCal.get(Calendar.YEAR) - startCal.get(Calendar.YEAR);
-        int m = currentCal.get(Calendar.MONTH) - startCal.get(Calendar.MONTH);
-        int d = currentCal.get(Calendar.DAY_OF_MONTH) - startCal.get(Calendar.DAY_OF_MONTH);
-        int h = currentCal.get(Calendar.HOUR_OF_DAY) - startCal.get(Calendar.HOUR_OF_DAY);
-        int min = currentCal.get(Calendar.MINUTE) - startCal.get(Calendar.MINUTE);
+        currentCal.add(Calendar.YEAR,(-startCal.get(Calendar.YEAR)));
+        currentCal.add(Calendar.MONTH,-startCal.get(Calendar.MONTH));
+        currentCal.add(Calendar.DAY_OF_MONTH,-startCal.get(Calendar.DAY_OF_MONTH)+1);
+        currentCal.add(Calendar.HOUR_OF_DAY,-startCal.get(Calendar.HOUR_OF_DAY));
+        currentCal.add(Calendar.MINUTE,-startCal.get(Calendar.MINUTE));
+
+        int y = currentCal.get(Calendar.YEAR)-1;
+        int m = currentCal.get(Calendar.MONTH);
+        int d = currentCal.get(Calendar.DAY_OF_MONTH)-1;
+        int h = currentCal.get(Calendar.HOUR_OF_DAY);
+        int min = currentCal.get(Calendar.MINUTE);
+
         return h + ":" + min + "  " + d + "-" + m + "-" + y;
     }
 }
@@ -243,5 +247,21 @@ public class Homework4 {
     {
         Battle battle = new Battle();
         battle.fight();
+//        GregorianCalendar cal1 = new GregorianCalendar();
+//        GregorianCalendar cal2 = new GregorianCalendar();
+//        cal2.add(Calendar.MINUTE, 45);
+//
+//        cal2.add(Calendar.YEAR,(-cal2.get(Calendar.YEAR)));
+//        cal2.add(Calendar.MONTH,-cal1.get(Calendar.MONTH));
+//        cal2.add(Calendar.DAY_OF_MONTH,-cal1.get(Calendar.DAY_OF_MONTH)+1);
+//        cal2.add(Calendar.HOUR_OF_DAY,-cal1.get(Calendar.HOUR_OF_DAY));
+//        cal2.add(Calendar.MINUTE,-cal1.get(Calendar.MINUTE));
+//
+//        int y = cal2.get(Calendar.YEAR)-1;
+//        int m = cal2.get(Calendar.MONTH);
+//        int d = cal2.get(Calendar.DAY_OF_MONTH)-1;
+//        int h = cal2.get(Calendar.HOUR_OF_DAY);
+//        int min = cal2.get(Calendar.MINUTE);
+//        System.out.println(h + ":" + min + "  " + d + "-" + m + "-" + y);
     }
 }
