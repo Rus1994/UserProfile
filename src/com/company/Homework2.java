@@ -34,7 +34,7 @@ public class Homework2 {
     static Scanner scan;
     static ArrayList<UserProfile> Users;
 
-    static private int Menu() {
+    private int Menu() {
         System.out.println("Выберите действие:");
         System.out.println("1 - найти пользователя");
         System.out.println("2 - создать пользователя");
@@ -46,7 +46,7 @@ public class Homework2 {
         return result;
     }
 
-    static private int nameAtArr(String name) {
+    private int nameAtArr(String name) {
         int ind;
         for (ind = 0; ind < Users.size(); ind++) {
             if (Users.get(ind).name.equals(name)) {
@@ -56,7 +56,7 @@ public class Homework2 {
         return -1;
     }
 
-    static private void findProfile() {
+    private void findProfile() {
         System.out.print("Введите имя пользователя: ");
         String nameUser = scan.nextLine();
         int ind = nameAtArr(nameUser);
@@ -67,7 +67,7 @@ public class Homework2 {
         }
     }
 
-    static private void deleteProfile() {
+    private void deleteProfile() {
         System.out.print("Введите имя пользователя, которого хотите удалить: ");
         String nameUser = scan.nextLine();
         int ind = nameAtArr(nameUser);
@@ -78,13 +78,13 @@ public class Homework2 {
         }
     }
 
-    static private void showListProfile() {
+    private void showListProfile() {
         for (UserProfile user : Users) {
             System.out.println(user.name);
         }
     }
 
-    static private void createProfile() {
+    private void createProfile() {
         UserProfile user = new UserProfile();
         Users.add(user);
         System.out.print("Введите имя: ");
@@ -105,16 +105,14 @@ public class Homework2 {
         user.otherInfo = scan.nextLine();
     }
 
-    static public void homework2_2()
-    {
+    public void homework2_2() {
         System.out.println("Домашнее задание 2 - Профиль");
         scan = new Scanner(System.in);
         Users = new ArrayList<UserProfile>();
         int option;
         do {
             option = Menu();
-            switch(option)
-            {
+            switch (option) {
                 case 0:
                     break;
                 case 1:
@@ -133,11 +131,11 @@ public class Homework2 {
                     System.out.println("Выбранный вариант отсутствует");
                     break;
             }
-        }while(option != 0);
+        } while (option != 0);
         System.out.println("");
     }
-    static public void homeworkRegex()
-    {
+
+    public void homeworkRegex() {
         System.out.println("Домашнее задание 2 - регулярные выражения, проверка входных данных от пользователя(паспорт)");
 
         scan = new Scanner(System.in);
@@ -151,45 +149,36 @@ public class Homework2 {
 
         StringBuffer strBuf = new StringBuffer();
 
-        if(match.find())
-        {
+        if (match.find()) {
             System.out.println(match.group(0));
-        }
-        else
-        {
+        } else {
             int count = 0;
-            while(match2.find())
-            {
+            while (match2.find()) {
                 count++;
-                if(count > 10)
-                {
+                if (count > 10) {
                     break;
                 }
                 strBuf.append(match2.group(0));
-                if(count == 4)
-                {
+                if (count == 4) {
                     strBuf.append(" ");
                 }
             }
-            if(count == 10)
-            {
+            if (count == 10) {
                 System.out.println(strBuf);
-            }
-            else
-            {
+            } else {
                 System.out.println("Количество цифр не соответствует формату");
             }
         }
         System.out.println("");
     }
-    static public void homeworkAdd()
-    {
+
+    public void homeworkAdd() {
         System.out.println("Домашнее задание 2 - Вывод текста в квадрате");
         homeworkAdd(0);
         System.out.println("");
     }
-    static private void homeworkAdd(int addSize)
-    {
+
+    private void homeworkAdd(int addSize) {
         String text = "Java is a general-purpose computer programming language that is concurrent, class-based, object-oriented, and " +
                 "specifically designed to have as few implementation dependencies as possible. It is intended to let application " +
                 "developers write once, run anywhere, meaning that compiled Java code can run on all platforms that support Java " +
@@ -200,7 +189,7 @@ public class Homework2 {
                 "Microsystems' Java platform.";
 
         int count = text.length();
-        int size = (int)Math.sqrt(count)+addSize;
+        int size = (int) Math.sqrt(count) + addSize;
         Pattern ptr = Pattern.compile(" "); // шаблон
         Matcher match = ptr.matcher(text);
         List<Integer> indexList = new ArrayList<Integer>(); // индексы всех пробелов
@@ -211,74 +200,60 @@ public class Homework2 {
         int limit = size;
         int countSpace = 0;
 
-        while(match.find()) // записываем индексы всех пробелов
+        while (match.find()) // записываем индексы всех пробелов
         {
             indexList.add(match.start());
         }
 
-        for(int i = 0; i < indexList.size(); i++)
-        {
-            if(indexList.get(i) > limit)
-            {
-                spaceList.add(indexList.get(i-1)); // индексы переходов на новую строку
-                addSpaceList.add(limit - indexList.get(i-1));
-                limit = indexList.get(i-1)+size;
+        for (int i = 0; i < indexList.size(); i++) {
+            if (indexList.get(i) > limit) {
+                spaceList.add(indexList.get(i - 1)); // индексы переходов на новую строку
+                addSpaceList.add(limit - indexList.get(i - 1));
+                limit = indexList.get(i - 1) + size;
                 countSpaceList.add(countSpace - 1); // записываем кол-во пробелов в строке, чтобы в них распределять оставшеесь пространство
                 countSpace = 1;
-            }
-            else
-            {
+            } else {
                 countSpace++;
             }
         }
         spaceList.add(text.length());
         indexList.add(text.length());
-        if(Math.abs(size - spaceList.size()) <= 1)
-        {
+        if (Math.abs(size - spaceList.size()) <= 1) {
             int ind = 0;
             int indSp = 0;
-            int addSpace = addSpaceList.get(0)/countSpaceList.get(0);
-            countSpace = addSpaceList.get(0)%countSpaceList.get(0);
-            for(int i = 0; i < text.length(); i++)
-            {
-                if(i != indexList.get(ind)) // если символ не пробел, то просто его выводим
+            int addSpace = addSpaceList.get(0) / countSpaceList.get(0);
+            countSpace = addSpaceList.get(0) % countSpaceList.get(0);
+            for (int i = 0; i < text.length(); i++) {
+                if (i != indexList.get(ind)) // если символ не пробел, то просто его выводим
                 {
                     System.out.print(text.charAt(i));
-                }
-                else if(i !=  spaceList.get(indSp)) // если это просто пробел
+                } else if (i != spaceList.get(indSp)) // если это просто пробел
                 {
-                    if(countSpace == 0)
-                    {
-                        String str = new String(new char[addSpace+1]).replace("\0", " ");
+                    if (countSpace == 0) {
+                        String str = new String(new char[addSpace + 1]).replace("\0", " ");
                         System.out.print(str);
-                    }
-                    else
-                    {
+                    } else {
                         String str = new String(new char[addSpace + 2]).replace("\0", " ");
                         System.out.print(str);
                         countSpace--;
                     }
                     ind++;
-                }
-                else // если переход на другую строку
+                } else // если переход на другую строку
                 {
                     System.out.println("");
                     ind++;
                     indSp++;
-                    if(indSp < addSpaceList.size())
-                    {
-                        addSpace = countSpaceList.get(indSp) != 0 ? (addSpaceList.get(indSp)/countSpaceList.get(indSp)) : 0;
-                        countSpace = countSpaceList.get(indSp) != 0 ? addSpaceList.get(indSp)%countSpaceList.get(indSp) : 0;
+                    if (indSp < addSpaceList.size()) {
+                        addSpace = countSpaceList.get(indSp) != 0 ? (addSpaceList.get(indSp) / countSpaceList.get(indSp)) : 0;
+                        countSpace = countSpaceList.get(indSp) != 0 ? addSpaceList.get(indSp) % countSpaceList.get(indSp) : 0;
                         countSpace++;
                     }
 
                 }
             }
 
-        }
-        else
-        {
-            homeworkAdd(addSize+1);
+        } else {
+            homeworkAdd(addSize + 1);
         }
 
     }

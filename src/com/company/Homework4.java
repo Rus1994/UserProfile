@@ -4,23 +4,25 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 
-interface Warrior
-{
+interface Warrior {
     int attack();
+
     void takeDamage(int damage);
+
     boolean isAlive();
+
     void setSquadName(String name);
 }
-abstract class AbsWarrior implements Warrior
-{
+
+abstract class AbsWarrior implements Warrior {
     protected int health;
     protected int damage;
     protected String nameSquad;
     protected String nameClass;
     protected int IDwarrior = 0;
 
-    AbsWarrior(String _nameSquad){
-        nameSquad = _nameSquad;
+    AbsWarrior(String nameSquad) {
+        this.nameSquad = nameSquad;
     }
 
     @Override
@@ -48,11 +50,12 @@ abstract class AbsWarrior implements Warrior
         return nameClass + " №" + IDwarrior + " Отряд: " + nameSquad;
     }
 }
-class Viking extends AbsWarrior
-{
+
+class Viking extends AbsWarrior {
     static int counterID = 0;
-    Viking(String _nameSquad){
-        super(_nameSquad);
+
+    Viking(String nameSquad) {
+        super(nameSquad);
         counterID++;
         IDwarrior = counterID;
         nameClass = "Викинг";
@@ -60,11 +63,12 @@ class Viking extends AbsWarrior
         damage = 50;
     }
 }
-class Knight extends  AbsWarrior
-{
+
+class Knight extends AbsWarrior {
     static int counterID = 0;
-    Knight(String _nameSquad){
-        super(_nameSquad);
+
+    Knight(String nameSquad) {
+        super(nameSquad);
         counterID++;
         IDwarrior = counterID;
         nameClass = "Рыцарь";
@@ -72,43 +76,45 @@ class Knight extends  AbsWarrior
         damage = 40;
     }
 }
-class Squad
-{
+
+class Squad {
     Vector<Warrior> warriorsList;
     String nameSquad;
     int quanVikings;
     int quanKnights;
-    private void createWarriorsList(int _quanVikings, int _quanKnights)
-    {
+
+    private void createWarriorsList(int quanVikings, int quanKnights) {
         warriorsList = new Vector<Warrior>();
-        for(int i = 0; i < _quanVikings; i++)
+        for (int i = 0; i < quanVikings; i++)
             warriorsList.add(new Viking(nameSquad));
-        for(int i = 0; i < _quanKnights; i++)
+        for (int i = 0; i < quanKnights; i++)
             warriorsList.add(new Knight(nameSquad));
     }
-    Squad(String _nameSquad, int _quanVikings, int _quanKnights)
-    {
-        nameSquad = _nameSquad;
-        createWarriorsList(_quanVikings, _quanKnights);
+
+    Squad(String nameSquad, int quanVikings, int quanKnights) {
+        this.nameSquad = nameSquad;
+        createWarriorsList(quanVikings, quanKnights);
     }
-    public Squad(Squad obj)
-    {
+
+    public Squad(Squad obj) {
         this.nameSquad = obj.nameSquad;
         this.quanVikings = obj.quanVikings;
         this.quanKnights = obj.quanKnights;
         createWarriorsList(obj.quanVikings, obj.quanKnights);
     }
-    public Warrior getRandomWarrior(){
+
+    public Warrior getRandomWarrior() {
         Warrior war;
         do {
             int numWar = (int) (Math.random() * warriorsList.size());
             war = warriorsList.get(numWar);
-        }while(!war.isAlive());
+        } while (!war.isAlive());
         return war;
     }
-    public boolean hasAliveWarriors(){
+
+    public boolean hasAliveWarriors() {
         for (Warrior war : warriorsList) {
-            if(war.isAlive())
+            if (war.isAlive())
                 return true;
         }
         return false;
@@ -124,112 +130,110 @@ class Squad
         return new Squad(this);
     }
 }
-class DateHelper
-{
+
+class DateHelper {
     Date startTime;
     Date currentTime;
     GregorianCalendar startCal;
     GregorianCalendar currentCal;
-    DateHelper()
-    {
+
+    DateHelper() {
         startCal = new GregorianCalendar();
         startCal.add(Calendar.YEAR, -1500);
         currentCal = (GregorianCalendar) startCal.clone();
     }
-    public String getFormattedStartDate(){
+
+    public String getFormattedStartDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss dd-MMM-y");
         return formatter.format(startCal.getTime());
     }
-    public void skipTime(){
+
+    public void skipTime() {
         currentCal.add(Calendar.MINUTE, 45);
     }
-    public String getFormattedDiff()
-    {
+
+    public String getFormattedDiff() {
         currentTime = currentCal.getTime();
         long diffTime = currentCal.getTime().getTime() - startCal.getTime().getTime();
         System.out.println(diffTime);
-        currentCal.add(Calendar.YEAR,(-startCal.get(Calendar.YEAR)));
-        currentCal.add(Calendar.MONTH,-startCal.get(Calendar.MONTH));
-        currentCal.add(Calendar.DAY_OF_MONTH,-startCal.get(Calendar.DAY_OF_MONTH)+1);
-        currentCal.add(Calendar.HOUR_OF_DAY,-startCal.get(Calendar.HOUR_OF_DAY));
-        currentCal.add(Calendar.MINUTE,-startCal.get(Calendar.MINUTE));
+        currentCal.add(Calendar.YEAR, (-startCal.get(Calendar.YEAR)));
+        currentCal.add(Calendar.MONTH, -startCal.get(Calendar.MONTH));
+        currentCal.add(Calendar.DAY_OF_MONTH, -startCal.get(Calendar.DAY_OF_MONTH) + 1);
+        currentCal.add(Calendar.HOUR_OF_DAY, -startCal.get(Calendar.HOUR_OF_DAY));
+        currentCal.add(Calendar.MINUTE, -startCal.get(Calendar.MINUTE));
 
-        int y = currentCal.get(Calendar.YEAR)-1;
+        int y = currentCal.get(Calendar.YEAR) - 1;
         int m = currentCal.get(Calendar.MONTH);
-        int d = currentCal.get(Calendar.DAY_OF_MONTH)-1;
+        int d = currentCal.get(Calendar.DAY_OF_MONTH) - 1;
         int h = currentCal.get(Calendar.HOUR_OF_DAY);
         int min = currentCal.get(Calendar.MINUTE);
 
         return h + ":" + min + "  " + d + "-" + m + "-" + y;
     }
 }
-class Battle
-{
+
+class Battle {
     Scanner scan;
     Squad squad1;
     Squad squad2;
     int countWar;
-    Battle()
-    {
+
+    Battle() {
         scan = new Scanner(System.in);
     }
-    private Squad createSquad()
-    {
+
+    private Squad createSquad() {
         System.out.print("Введите название отряда: ");
         String name = scan.nextLine();
         int countVik = 0;
         do {
-            if((countVik > countWar) || (countVik < 0))
+            if ((countVik > countWar) || (countVik < 0))
                 System.out.println("Количество Викингов не может быть меньше 0 или превышать бойцов в отряде");
 
             System.out.print("Введите количество Викингов в отряде1, остальные будут Рыцари: ");
             countVik = scan.nextInt();
             scan.nextLine();
-        }while((countVik > countWar) || (countVik < 0));
-        return new Squad(name, countVik, countWar-countVik);
+        } while ((countVik > countWar) || (countVik < 0));
+        return new Squad(name, countVik, countWar - countVik);
     }
-    public void createSquads()
-    {
+
+    public void createSquads() {
         countWar = 1;
         do {
-            if(countWar < 1)
+            if (countWar < 1)
                 System.out.println("Количество бойцов не может быть меньше 1");
 
             System.out.print("Введите количество бойцов в отряде: ");
             countWar = scan.nextInt();
             scan.nextLine();
-        }while(countWar < 1);
+        } while (countWar < 1);
 
         System.out.println("Создание первого отряда");
         squad1 = createSquad();
         System.out.println("Создание второго отряда");
         squad2 = createSquad();
     }
-    public void fight()
-    {
+
+    public void fight() {
         boolean attackFirst = true;
         boolean isFinish = false;
         AbsWarrior war1, war2;
         createSquads();
         DateHelper dataManag = new DateHelper();
         System.out.println(dataManag.getFormattedStartDate());
-        while(!isFinish)
-        {
+        while (!isFinish) {
             war1 = (AbsWarrior) squad1.getRandomWarrior();
             war2 = (AbsWarrior) squad2.getRandomWarrior();
-            if(attackFirst)
-            {
+            if (attackFirst) {
                 war2.takeDamage(war1.attack());
                 attackFirst = false;
-                if(!squad2.hasAliveWarriors())
+                if (!squad2.hasAliveWarriors())
                     isFinish = true;
                 System.out.println(war1.toString() + " атаковал " + war2.toString());
-            }
-            else
-            {
+            } else {
                 war1.takeDamage(war2.attack());
                 attackFirst = true;
-                if(!squad1.hasAliveWarriors())
+                if (!squad1.hasAliveWarriors())
                     isFinish = true;
                 System.out.println(war2.toString() + " атаковал " + war1.toString());
             }
@@ -243,25 +247,8 @@ class Battle
 }
 
 public class Homework4 {
-    static void run()
-    {
+    static void run() {
         Battle battle = new Battle();
         battle.fight();
-//        GregorianCalendar cal1 = new GregorianCalendar();
-//        GregorianCalendar cal2 = new GregorianCalendar();
-//        cal2.add(Calendar.MINUTE, 45);
-//
-//        cal2.add(Calendar.YEAR,(-cal2.get(Calendar.YEAR)));
-//        cal2.add(Calendar.MONTH,-cal1.get(Calendar.MONTH));
-//        cal2.add(Calendar.DAY_OF_MONTH,-cal1.get(Calendar.DAY_OF_MONTH)+1);
-//        cal2.add(Calendar.HOUR_OF_DAY,-cal1.get(Calendar.HOUR_OF_DAY));
-//        cal2.add(Calendar.MINUTE,-cal1.get(Calendar.MINUTE));
-//
-//        int y = cal2.get(Calendar.YEAR)-1;
-//        int m = cal2.get(Calendar.MONTH);
-//        int d = cal2.get(Calendar.DAY_OF_MONTH)-1;
-//        int h = cal2.get(Calendar.HOUR_OF_DAY);
-//        int min = cal2.get(Calendar.MINUTE);
-//        System.out.println(h + ":" + min + "  " + d + "-" + m + "-" + y);
     }
 }
