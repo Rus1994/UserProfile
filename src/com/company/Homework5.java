@@ -83,10 +83,11 @@ class TerminalSimple implements Terminal {
     private Account currentAcc;
 
     private int countTryInputPIN = 0;
-    Scanner scan;
+    private Scanner scan;
 
-    public void TerminalSimple() {
+    TerminalSimple() {
         scan = new Scanner(System.in);
+        clientList = new HashMap<String, Account>();
     }
 
     private void inputPIN() throws NotCorrectPIN {
@@ -111,24 +112,38 @@ class TerminalSimple implements Terminal {
         return true;
     }
 
-    public void enterToTerminal(String name) {
+    public boolean enterToTerminal(String name) {
         if (!clientList.containsKey(name)) {
             System.out.println("Данный клиент отсутствует в базе");
-            return;
+            System.out.println("Создать аккаунт?");
+            System.out.println("1 - Да\n0 - Нет");
+            int ans = scan.nextInt();
+            scan.nextLine();
+            if (ans == 1) {
+                try {
+                    createClient(name);
+                } catch (CreateDuplicate err) {
+                    err.printStackTrace();
+                }
+            }
+            return false;
         }
-        currentAcc = null;
+        currentAcc = clientList.get(name);
         try {
             if (checkPIN()) {
-                currentAcc = clientList.get(name);
+                return true;
+            } else {
+                currentAcc = null;
             }
         } catch (BlockAccount err) {
             try {
                 System.out.println("Превышен лимит попыток. Ваш аккаунт будет заблокирован на 5 секунд");
-                wait(5000);
+                Thread.sleep(5000);
             } catch (InterruptedException er) {
-                er.printStackTrace();
+                System.out.println(er.toString());
             }
         }
+        return false;
     }
 
     private int getIndexOfCardList(Vector<Card> cardList) {
@@ -245,7 +260,88 @@ class TerminalSimple implements Terminal {
 
 }
 
-public class Homework5 {
-    TerminalSimple term = new TerminalSimple();
+class MenuTerminal {
+    private TerminalSimple terminal;
+    private Scanner scan;
 
+    MenuTerminal() {
+        terminal = new TerminalSimple();
+        scan = new Scanner(System.in);
+    }
+
+    private void start() {
+        System.out.println("Введите имя пользователя");
+        String name = scan.nextLine();
+        if (!terminal.enterToTerminal(name)) {
+            return;
+        }
+
+        int ans = 1;
+        while(ans != 0)
+        {
+
+            System.out.println("1 - Проверить счёт");
+            System.out.println("2 - Внести наличные");
+            System.out.println("3 - Снять наличные");
+            System.out.println("4 - Создать карту");
+            System.out.println("5 - Удалить карту");
+            System.out.println("6 - Удалить клиента");
+            System.out.println("0 - Выйти из терминала");
+
+            ans = scan.nextInt();
+            scan.nextLine();
+
+            switch (ans) {
+                case 1:
+                    terminal.checkMoney();
+                    break;
+                case 2:
+                    terminal.putMoney();
+                    break;
+                case 3:
+                    try {
+                        if (terminal.takeMoney()) {
+                            System.out.println("Возьмите деньги");
+                        }
+                    } catch (NotEnoughMoneyOnCard err) {
+//                        err.printStackTrace();
+                        System.out.println(err.toString());
+                    }
+                    break;
+                case 4:
+                    try {
+                        terminal.createCard();
+                    } catch (CreateDuplicate err) {
+                        System.out.println("Дубликат карты");
+//                    err.printStackTrace();
+                    }
+                    break;
+                case 5:
+                    terminal.deleteCard();
+                    break;
+                case 6:
+                    terminal.deleteClient();
+                    break;
+            }
+        }
+    }
+
+    public void beginTerminal() {
+        int ans = 0;
+        do {
+            if (ans == 1) {
+                start();
+            }
+            System.out.println("Желаете войти в терминал?\n1 - Да\n0 - Нет");
+            ans = scan.nextInt();
+            scan.nextLine();
+        } while (ans == 1);
+    }
+}
+
+public class Homework5 {
+    public static void run() {
+        MenuTerminal menu = new MenuTerminal();
+        menu.beginTerminal();
+    }
 }
