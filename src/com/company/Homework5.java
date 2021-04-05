@@ -1,5 +1,9 @@
 package com.company;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -78,7 +82,7 @@ class Card {
 }
 
 class TerminalSimple implements Terminal {
-    private HashMap<String, Account> clientList; // по имени клиента выбираем его аккаунт
+    public HashMap<String, Account> clientList; // по имени клиента выбираем его аккаунт
 
     private Account currentAcc;
 
@@ -336,6 +340,29 @@ class MenuTerminal {
             ans = scan.nextInt();
             scan.nextLine();
         } while (ans == 1);
+        saveToFile();
+
+    }
+
+    private void saveToFile(){
+        try{
+            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("out.txt")));
+            HashMap<String, Account> clientList = terminal.clientList;
+            for (Map.Entry<String, Account> entry : clientList.entrySet()) {
+                Account acc = entry.getValue();
+                out.println(acc.client.name);
+                out.println(acc.pin);
+                out.println(acc.client.cardList.size());
+                for(Card card : acc.client.cardList){
+                    out.println(card.number);
+                    out.println(card.money);
+                }
+            }
+            out.close();
+        } catch (IOException err){
+            System.out.println("Error save to file");
+        }
+
     }
 }
 
