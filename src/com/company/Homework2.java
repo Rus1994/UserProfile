@@ -31,10 +31,23 @@ class UserProfile {
 
 public class Homework2 {
 
-    static Scanner scan;
-    static ArrayList<UserProfile> Users;
+    private Scanner scan = new Scanner(System.in);
+    private ArrayList<UserProfile> Users;
 
-    private int Menu() {
+    private String getLineConsole(String message){
+        System.out.print(message);
+        return scan.nextLine();
+    }
+
+    enum MenuItem{
+        EXIT,
+        FIND_USER,
+        CREATE_USER,
+        DELETE_USER,
+        SHOW_USERS
+    }
+
+    private MenuItem menu() {
         System.out.println("Выберите действие:");
         System.out.println("1 - найти пользователя");
         System.out.println("2 - создать пользователя");
@@ -43,22 +56,20 @@ public class Homework2 {
         System.out.println("0 - выйти из программы");
         int result = scan.nextInt();
         scan.nextLine();
-        return result;
+        return MenuItem.values()[result];
     }
 
     private int nameAtArr(String name) {
-        int ind;
-        for (ind = 0; ind < Users.size(); ind++) {
-            if (Users.get(ind).name.equals(name)) {
-                return ind;
+        for (int i = 0; i < Users.size(); i++) {
+            if (Users.get(i).name.equals(name)) {
+                return i;
             }
         }
         return -1;
     }
 
     private void findProfile() {
-        System.out.print("Введите имя пользователя: ");
-        String nameUser = scan.nextLine();
+        String nameUser = getLineConsole("Введите имя пользователя: ");
         int ind = nameAtArr(nameUser);
         if (ind == -1) {
             System.out.println("Пользователь не найден");
@@ -68,8 +79,7 @@ public class Homework2 {
     }
 
     private void deleteProfile() {
-        System.out.print("Введите имя пользователя, которого хотите удалить: ");
-        String nameUser = scan.nextLine();
+        String nameUser = getLineConsole("Введите имя пользователя, которого хотите удалить: ");
         int ind = nameAtArr(nameUser);
         if (ind == -1) {
             System.out.println("Пользователь не найден");
@@ -87,60 +97,49 @@ public class Homework2 {
     private void createProfile() {
         UserProfile user = new UserProfile();
         Users.add(user);
-        System.out.print("Введите имя: ");
-        user.name = scan.nextLine();
-        System.out.print("Введите адрес эл.почты: ");
-        user.email = scan.nextLine();
-        System.out.print("Введите дату рождения: ");
-        user.date = scan.nextLine();
-        System.out.print("Введите адрес проживания: ");
-        user.address = scan.nextLine();
-        System.out.print("Введите номер телефона: ");
-        user.numberPhone = scan.nextLine();
-        System.out.print("Введите место работы: ");
-        user.placeWork = scan.nextLine();
-        System.out.print("Напишите о себе: ");
-        user.infoMyself = scan.nextLine();
-        System.out.print("Укажите прочую информацию: ");
-        user.otherInfo = scan.nextLine();
+        user.name = getLineConsole("Введите имя: ");
+        user.email = getLineConsole("Введите адрес эл.почты: ");
+        user.date = getLineConsole("Введите дату рождения: ");
+        user.address = getLineConsole("Введите адрес проживания: ");
+        user.numberPhone = getLineConsole("Введите номер телефона: ");
+        user.placeWork = getLineConsole("Введите место работы: ");
+        user.infoMyself = getLineConsole("Напишите о себе: ");
+        user.otherInfo = getLineConsole("Укажите прочую информацию: ");
     }
 
     public void homework2_2() {
         System.out.println("Домашнее задание 2 - Профиль");
-        scan = new Scanner(System.in);
         Users = new ArrayList<UserProfile>();
-        int option;
+        MenuItem option;
         do {
-            option = Menu();
+            option = menu();
             switch (option) {
-                case 0:
+                case EXIT:
                     break;
-                case 1:
+                case FIND_USER:
                     findProfile();
                     break;
-                case 2:
+                case CREATE_USER:
                     createProfile();
                     break;
-                case 3:
+                case DELETE_USER:
                     deleteProfile();
                     break;
-                case 4:
+                case SHOW_USERS:
                     showListProfile();
                     break;
                 default:
                     System.out.println("Выбранный вариант отсутствует");
                     break;
             }
-        } while (option != 0);
+        } while (option != MenuItem.EXIT);
         System.out.println("");
     }
 
     public void homeworkRegex() {
         System.out.println("Домашнее задание 2 - регулярные выражения, проверка входных данных от пользователя(паспорт)");
 
-        scan = new Scanner(System.in);
-        System.out.print("Введите серию и номер паспорта: ");
-        String inputStr = scan.nextLine();//"36 14 123456";
+        String inputStr = getLineConsole("Введите серию и номер паспорта: ");//"36 14 123456";
         Pattern ptr = Pattern.compile("\\d{4}\\s\\d{6}"); // шаблон
         Matcher match = ptr.matcher(inputStr);
 

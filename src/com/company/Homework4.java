@@ -1,7 +1,6 @@
 package com.company;
 
 import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.util.*;
 
 interface Warrior {
@@ -77,19 +76,11 @@ class Knight extends AbsWarrior {
     }
 }
 
-class Squad {
-    Vector<Warrior> warriorsList;
-    String nameSquad;
-    int quanVikings;
-    int quanKnights;
-
-    private void createWarriorsList(int quanVikings, int quanKnights) {
-        warriorsList = new Vector<Warrior>();
-        for (int i = 0; i < quanVikings; i++)
-            warriorsList.add(new Viking(nameSquad));
-        for (int i = 0; i < quanKnights; i++)
-            warriorsList.add(new Knight(nameSquad));
-    }
+class Squad implements Cloneable{
+    private Vector<Warrior> warriorsVector;
+    private String nameSquad;
+    private int quanVikings;
+    private int quanKnights;
 
     Squad(String nameSquad, int quanVikings, int quanKnights) {
         this.nameSquad = nameSquad;
@@ -103,17 +94,21 @@ class Squad {
         createWarriorsList(obj.quanVikings, obj.quanKnights);
     }
 
+    public String getNameSquad() {
+        return nameSquad;
+    }
+
     public Warrior getRandomWarrior() {
         Warrior war;
         do {
-            int numWar = (int) (Math.random() * warriorsList.size());
-            war = warriorsList.get(numWar);
+            int numWar = (int) (Math.random() * warriorsVector.size());
+            war = warriorsVector.get(numWar);
         } while (!war.isAlive());
         return war;
     }
 
     public boolean hasAliveWarriors() {
-        for (Warrior war : warriorsList) {
+        for (Warrior war : warriorsVector) {
             if (war.isAlive())
                 return true;
         }
@@ -129,13 +124,20 @@ class Squad {
     protected Object clone() throws CloneNotSupportedException {
         return new Squad(this);
     }
+
+    private void createWarriorsList(int quanVikings, int quanKnights) {
+        warriorsVector = new Vector<Warrior>();
+        for (int i = 0; i < quanVikings; i++)
+            warriorsVector.add(new Viking(nameSquad));
+        for (int i = 0; i < quanKnights; i++)
+            warriorsVector.add(new Knight(nameSquad));
+    }
 }
 
 class DateHelper {
-    Date startTime;
-    Date currentTime;
-    GregorianCalendar startCal;
-    GregorianCalendar currentCal;
+    private Date currentTime;
+    private GregorianCalendar startCal;
+    private GregorianCalendar currentCal;
 
     DateHelper() {
         startCal = new GregorianCalendar();
@@ -173,45 +175,13 @@ class DateHelper {
 }
 
 class Battle {
-    Scanner scan;
-    Squad squad1;
-    Squad squad2;
-    int countWar;
+    private Scanner scan;
+    private Squad squad1;
+    private Squad squad2;
+    private int countWar;
 
     Battle() {
         scan = new Scanner(System.in);
-    }
-
-    private Squad createSquad() {
-        System.out.print("Введите название отряда: ");
-        String name = scan.nextLine();
-        int countVik = 0;
-        do {
-            if ((countVik > countWar) || (countVik < 0))
-                System.out.println("Количество Викингов не может быть меньше 0 или превышать бойцов в отряде");
-
-            System.out.print("Введите количество Викингов в отряде1, остальные будут Рыцари: ");
-            countVik = scan.nextInt();
-            scan.nextLine();
-        } while ((countVik > countWar) || (countVik < 0));
-        return new Squad(name, countVik, countWar - countVik);
-    }
-
-    public void createSquads() {
-        countWar = 1;
-        do {
-            if (countWar < 1)
-                System.out.println("Количество бойцов не может быть меньше 1");
-
-            System.out.print("Введите количество бойцов в отряде: ");
-            countWar = scan.nextInt();
-            scan.nextLine();
-        } while (countWar < 1);
-
-        System.out.println("Создание первого отряда");
-        squad1 = createSquad();
-        System.out.println("Создание второго отряда");
-        squad2 = createSquad();
     }
 
     public void fight() {
@@ -219,8 +189,8 @@ class Battle {
         boolean isFinish = false;
         AbsWarrior war1, war2;
         createSquads();
-        DateHelper dataManag = new DateHelper();
-        System.out.println(dataManag.getFormattedStartDate());
+        DateHelper dataManager = new DateHelper();
+        System.out.println(dataManager.getFormattedStartDate());
         while (!isFinish) {
             war1 = (AbsWarrior) squad1.getRandomWarrior();
             war2 = (AbsWarrior) squad2.getRandomWarrior();
@@ -237,17 +207,55 @@ class Battle {
                     isFinish = true;
                 System.out.println(war2.toString() + " атаковал " + war1.toString());
             }
-            dataManag.skipTime();
+            dataManager.skipTime();
         }
         boolean winnerFirst = !attackFirst;
         Squad winner = winnerFirst ? squad1 : squad2;
-        System.out.println("Победитель --> " + winner.nameSquad);
-        System.out.println("Время битвы = " + dataManag.getFormattedDiff());
+        System.out.println("Победитель --> " + winner.getNameSquad());
+        System.out.println("Время битвы = " + dataManager.getFormattedDiff());
+    }
+
+    private Squad createSquad() {
+        System.out.print("Введите название отряда: ");
+        String name = scan.nextLine();
+        int countVik = 0;
+        do {
+            if ((countVik > countWar) || (countVik < 0)){
+                System.out.println("Количество Викингов не может быть меньше 0 или превышать бойцов в отряде");
+            }
+            countVik = getIntFromConsole("Введите количество Викингов в отряде1, остальные будут Рыцари: ");
+        } while ((countVik > countWar) || (countVik < 0));
+        return new Squad(name, countVik, countWar - countVik);
+    }
+
+    private Squad getNewSquad(String message) {
+        System.out.println(message);
+        return createSquad();
+    }
+
+    private void createSquads() {
+        countWar = 1;
+        do {
+            if (countWar < 1)
+                System.out.println("Количество бойцов не может быть меньше 1");
+
+            countWar = getIntFromConsole("Введите количество бойцов в отряде: ");
+        } while (countWar < 1);
+
+        squad1 = getNewSquad("Создание первого отряда");
+        squad2 = getNewSquad("Создание второго отряда");
+    }
+
+    private int getIntFromConsole(String message) {
+        System.out.println(message);
+        int num = scan.nextInt();
+        scan.nextLine();
+        return num;
     }
 }
 
 public class Homework4 {
-    static void run() {
+    public void run() {
         Battle battle = new Battle();
         battle.fight();
     }

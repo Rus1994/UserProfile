@@ -7,7 +7,8 @@ public class Main {
 //        Homework2.homeworkRegex();
 //        Homework2.homework2_2();
 //        Homework3.run();
-//        Homework4.run();
+//        Homework4 hw4 = new Homework4();
+//        hw4.run();
         Homework5.run();
     }
 }

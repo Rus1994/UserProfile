@@ -28,16 +28,16 @@ enum Drinks {
 }
 
 class IceCream {
-    static public HashMap<Containers, Float> contPrice;
-    static public HashMap<Tastes, Float> tastePrice;
-    static public HashMap<Toppings, Float> topPrice;
+    protected HashMap<Containers, Float> contPrice;
+    protected HashMap<Tastes, Float> tastePrice;
+    protected HashMap<Toppings, Float> topPrice;
     protected Containers container;
     protected Tastes taste;
     protected Toppings topping;
     protected float basePrice;
     protected float totalPrice;
 
-    static {
+    public IceCream() {
         contPrice = new HashMap<Containers, Float>();
         tastePrice = new HashMap<Tastes, Float>();
         topPrice = new HashMap<Toppings, Float>();
@@ -53,9 +53,6 @@ class IceCream {
         topPrice.put(Toppings.NUTS, 13F);
         topPrice.put(Toppings.FRUIT, 14F);
         topPrice.put(Toppings.NONE, (float) 0);
-    } // инициализируем цены
-
-    public IceCream() {
     } // дефолтный конструктор
 
     public IceCream(Containers container, Tastes taste, Toppings topping) {
@@ -94,7 +91,7 @@ class IceCream {
 }
 
 class Surprise extends IceCream {
-    Toppings topping2;
+    protected Toppings topping2;
 
     public Surprise() {
         super();
@@ -124,19 +121,18 @@ class Surprise extends IceCream {
 }
 
 class Extra extends IceCream {
-    static public HashMap<Drinks, Float> drinkPrice;
+    protected HashMap<Drinks, Float> drinkPrice;
     Drinks drink;
 
-    static {
+    public Extra(Containers container, Tastes taste, Drinks drink) {
+        super(container, taste, Toppings.NONE);
+
         drinkPrice = new HashMap<Drinks, Float>();
         drinkPrice.put(Drinks.WATER, 5F);
         drinkPrice.put(Drinks.TEA, 8F);
         drinkPrice.put(Drinks.MILK, 12F);
         drinkPrice.put(Drinks.JUICE, 15F);
-    }
 
-    public Extra(Containers container, Tastes taste, Drinks drink) {
-        super(container, taste, Toppings.NONE);
         this.drink = drink;
         this.basePrice += drinkPrice.get(drink);
         this.totalPrice = basePrice;
