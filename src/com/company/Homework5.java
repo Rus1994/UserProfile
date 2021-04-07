@@ -531,7 +531,7 @@ class MenuTerminal {
 }
 
 public class Homework5 {
-    public static void run() {
+    public void run() {
         MenuTerminal menu = new MenuTerminal();
         menu.beginTerminal();
     }
