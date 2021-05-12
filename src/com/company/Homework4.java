@@ -78,7 +78,7 @@ class Knight extends AbsWarrior {
 
 class Squad implements Cloneable{
     private Vector<Warrior> warriorsVector;
-    private String nameSquad;
+    private final String nameSquad;
     private int quanVikings;
     private int quanKnights;
 
@@ -135,7 +135,7 @@ class Squad implements Cloneable{
 }
 
 class DateHelper {
-    private Date currentTime;
+//    private Date currentTime;
     private GregorianCalendar startCal;
     private GregorianCalendar currentCal;
 
@@ -155,9 +155,9 @@ class DateHelper {
     }
 
     public String getFormattedDiff() {
-        currentTime = currentCal.getTime();
-        long diffTime = currentCal.getTime().getTime() - startCal.getTime().getTime();
-        System.out.println(diffTime);
+//        currentTime = currentCal.getTime();
+//        long diffTime = currentCal.getTime().getTime() - startCal.getTime().getTime();
+//        System.out.println(diffTime);
         currentCal.add(Calendar.YEAR, (-startCal.get(Calendar.YEAR)));
         currentCal.add(Calendar.MONTH, -startCal.get(Calendar.MONTH));
         currentCal.add(Calendar.DAY_OF_MONTH, -startCal.get(Calendar.DAY_OF_MONTH) + 1);

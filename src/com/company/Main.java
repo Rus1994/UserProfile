@@ -11,7 +11,9 @@ public class Main {
 //        hw4.run();
 //        Homework5 hw5 = new Homework5();
 //        hw5.run();
-        Homework6 hw6 = new Homework6();
-        hw6.run();
+//        Homework6 hw6 = new Homework6();
+//        hw6.run();
+        Homework8 hw8 = new Homework8();
+        hw8.run();
     }
 }
