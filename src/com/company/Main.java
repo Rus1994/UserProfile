@@ -14,6 +14,6 @@ public class Main {
 //        Homework6 hw6 = new Homework6();
 //        hw6.run();
         Homework8 hw8 = new Homework8();
-        hw8.run();
+        hw8.run_HW2();
     }
 }

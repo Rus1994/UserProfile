@@ -85,7 +85,9 @@ class Card implements Serializable{
         number = num;
         money = 0;
     }
-
+    public void changeMoney(long val){
+        money += val;
+    }
     public long getNumber() {
         return number;
     }
