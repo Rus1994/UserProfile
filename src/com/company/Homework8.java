@@ -1,46 +1,47 @@
 package com.company;
 
-import java.util.concurrent.locks.ReentrantLock;
-
-class CardSynch{
+class CardSynch {
     private Card card;
     String state;
-    CardSynch(Card card){
+
+    CardSynch(Card card) {
         this.card = card;
         state = "DECREMENT";
     }
 
-    public synchronized void changeMoney(long add){
+    public synchronized void changeMoney(long add) {
         card.money += add;
     }
 
-    public synchronized void incrMoney(long inc){
-        while(state == "INCREMENT"){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public void incrMoney(long inc) {
+    //    public synchronized void incrMoney(long inc){
+//        while(state == "INCREMENT"){
+//            try {
+//                wait();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
         card.money += inc;
         state = "INCREMENT";
-        notify();
+//        notify();
     }
 
-    public synchronized void decrMoney(long dec){
-        if(state == "DECREMENT"){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public void decrMoney(long dec) {
+    //    public synchronized void decrMoney(long dec){
+//        if(state == "DECREMENT"){
+//            try {
+//                wait();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
         card.money -= dec;
         state = "DECREMENT";
-        notify();
+//        notify();
     }
 
-    public long getMoney(){
+    public long getMoney() {
         return card.money;
     }
 }
@@ -70,10 +71,9 @@ public class Homework8 {
     public void run_HW2() {
         Card cardNew = new Card(1);
         CardSynch card = new CardSynch(cardNew);
-        String state = "DECREMENT";
         long start = System.currentTimeMillis();
-        SequentialIncreaser incr = new SequentialIncreaser(card, state);
-        SequentialDecreaser decr = new SequentialDecreaser(card, state);
+        SequentialIncreaser incr = new SequentialIncreaser(card);
+        SequentialDecreaser decr = new SequentialDecreaser(card);
 
         try {
             incr.thr.join();

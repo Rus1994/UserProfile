@@ -1,14 +1,11 @@
 package com.company;
 
 class SequentialDecreaser implements Runnable {
-    Thread thr;
     private CardSynch card;
-    String state;
-    int i = 1;
+    Thread thr;
 
-    SequentialDecreaser(CardSynch card, String state) {
+    SequentialDecreaser(CardSynch card) {
         this.card = card;
-        this.state = state;
         thr = new Thread(this, "Decreaser");
         thr.start();
     }
@@ -19,22 +16,20 @@ class SequentialDecreaser implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        synchronized (card) {
-//            try {
-//                if (state == "DECREMENT") {
-//                    card.wait();
-//                }
-//            } catch (InterruptedException e) {
-//                System.out.println("Прерывание в декременте");
-//            }
+        synchronized (card) {
+            try {
+                if (card.state == "DECREMENT") {
+                    card.wait();
+                }
+            } catch (InterruptedException e) {
+                System.out.println("Прерывание в декременте");
+            }
             if (card.getMoney() >= dec) {
-//                card.changeMoney(-dec);
                 card.decrMoney(dec);
             }
             System.out.println(thr.getName() + " --> " + card.getMoney());
-//            state = "DECREMENT";
-//            card.notify();
-//        }
+            card.notify();
+        }
     }
 
 
@@ -42,7 +37,6 @@ class SequentialDecreaser implements Runnable {
     public void run() {
         for (int i = 1; i <= 3; i++) {
             decrement(2 * i);
-//        i++;
         }
     }
 }
